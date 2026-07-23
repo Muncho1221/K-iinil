@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('https://static.figma.com/font/PlayfairDisplay_wght__1') format('woff2');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('https://static.figma.com/font/PlayfairDisplay-Italic_wght__1') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('https://static.figma.com/font/DMSans_opsz_wght__1') format('woff2');
+}
+
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'DM Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+
+  --color-lavender-50: #fdf8ff;
+  --color-lavender-100: #f5e9ff;
+  --color-lavender-200: #ead4ff;
+  --color-lavender-300: #d8b4fe;
+  --color-lavender-400: #c084fc;
+  --color-lavender-500: #a855f7;
+  --color-lavender-600: #9333ea;
+  --color-lavender-700: #7e22ce;
+  --color-lavender-800: #6b21a8;
+  --color-lavender-900: #4c1d95;
+
+  --color-plum-50: #faf0ff;
+  --color-plum-100: #f0d9ff;
+  --color-plum-200: #e0b0ff;
+  --color-plum-300: #c97df0;
+  --color-plum-400: #b055d8;
+  --color-plum-500: #9333b8;
+  --color-plum-600: #7a1fa8;
+  --color-plum-700: #621090;
+  --color-plum-800: #4d0b70;
+  --color-plum-900: #350550;
+
+  --color-blush-100: #fce7f3;
+  --color-blush-200: #fbcfe8;
+  --color-blush-300: #f9a8d4;
+  --color-blush-400: #f472b6;
+  --color-blush-500: #ec4899;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c084fc transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #faf0ff;
+  color: #2a0a4a;
+}
