@@ -124,12 +124,17 @@ export default function App() {
       // Diagnóstico NoSQL
       try {
         const { data: noSqlData, error: noSqlError } = await noSqlService.getDocuments('products');
+        console.log('NoSQL Data (Products):', noSqlData);
         if (isMounted) {
             if (noSqlError) {
               console.error('❌ Error NoSQL (Products):', noSqlError.message);
             } else {
               if (noSqlData) {
-                setProducts(noSqlData.map((p: any) => ({ ...p.attributes, id: p.id })));
+                // Hacemos el mapeo más robusto por si 'attributes' no existe
+                setProducts(noSqlData.map((p: any) => ({ 
+                  ...(p.attributes || p), 
+                  id: p.id 
+                })));
               }
             }
         }
@@ -179,7 +184,7 @@ export default function App() {
         return;
     }
     
-    let imageUrl = 'https://placehold.co/400x400?text=Post';
+    let imageUrl = 'https://images.unsplash.com/photo-1596704017254-9b5c10898154?w=400&h=400&fit=crop';
 
     // Subir imagen si existe
     if (newPostImage) {
@@ -239,7 +244,10 @@ export default function App() {
 
         <Sidebar 
           activeTab={activeTab} 
-          setActiveTab={(tab: any) => { setActiveTab(tab); setShowCart(tab === 'shop'); }} 
+          setActiveTab={(tab: any) => { 
+            setActiveTab(tab); 
+            setShowCart(false); // No abrir el carrito por defecto
+          }} 
           setCreateOpen={setCreateOpen} 
           cartCount={cartCount} 
           userProfile={profile}

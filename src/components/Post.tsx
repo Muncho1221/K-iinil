@@ -26,21 +26,19 @@ export const Post = ({ post, onToggleLike, onToggleSave, onToggleComment, isComm
       )}
 
       {/* Post image */}
-      {post.image_url && !post.image_url.includes('placehold.co') && (
-        <div className="relative bg-lavender-100">
-          <img src={post.image_url} alt={post.caption} className="w-full aspect-square object-cover" />
-          {/* Shop tag overlay */}
-          {post.shopTag && (
-            <button className="absolute bottom-3 left-3 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg border border-lavender-100 hover:bg-lavender-50 transition-colors">
-              <span className="text-plum-700">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /></svg>
-              </span>
-              <span className="text-xs font-semibold text-plum-800">{post.shopTag.name}</span>
-              <span className="text-xs font-bold text-plum-500">{post.shopTag.price}</span>
-            </button>
-          )}
-        </div>
-      )}
+      <div className="relative bg-lavender-100">
+        <img src="https://images.unsplash.com/photo-1596704017254-9b5c10898154?w=400&h=400&fit=crop" alt={post.caption} className="w-full aspect-square object-cover" />
+        {/* Shop tag overlay */}
+        {post.shopTag && (
+          <button className="absolute bottom-3 left-3 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg border border-lavender-100 hover:bg-lavender-50 transition-colors">
+            <span className="text-plum-700">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /></svg>
+            </span>
+            <span className="text-xs font-semibold text-plum-800">{post.shopTag.name}</span>
+            <span className="text-xs font-bold text-plum-500">{post.shopTag.price}</span>
+          </button>
+        )}
+      </div>
 
       {/* Actions */}
       <div className="px-4 py-3 flex items-center gap-4">
@@ -73,7 +71,7 @@ export const Post = ({ post, onToggleLike, onToggleSave, onToggleComment, isComm
       {isCommentOpen && (
         <div className="px-4 pb-4 border-t border-lavender-50 pt-3 flex gap-2">
           <img
-            src="https://images.unsplash.com/photo-1573977040523-e16e112ccd3e?w=80&h=80&fit=crop&auto=format"
+            src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=80&h=80&fit=crop&auto=format"
             alt="Tú"
             className="w-7 h-7 rounded-full object-cover shrink-0 mt-1"
           />

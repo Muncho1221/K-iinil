@@ -1,10 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
-import dotenv from 'dotenv'
 
-dotenv.config()
+const getEnv = (key: string): string | undefined => {
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env[key]
+  }
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key]
+  }
+  return undefined
+}
 
-const supabaseUrl = process.env.VITE_SECOND_SUPABASE_URL
-const supabaseAnonKey = process.env.VITE_SECOND_SUPABASE_ANON_KEY
+const supabaseUrl = getEnv('VITE_SECOND_SUPABASE_URL')
+const supabaseAnonKey = getEnv('VITE_SECOND_SUPABASE_ANON_KEY')
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing NoSQL Supabase environment variables')

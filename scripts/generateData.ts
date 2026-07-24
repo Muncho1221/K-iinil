@@ -1,45 +1,78 @@
 import { faker } from '@faker-js/faker';
-import { sqlService } from '../src/services/sqlService.ts';
-import { noSqlService } from '../src/services/noSqlService.ts';
 
-/**
- * Script para poblar bases de datos de Actividad 2.
- * Ejecutar con: npx ts-node scripts/generateData.ts
- */
+// Diccionario temático de maquillaje
+const MAQUILLAJE_TEMAS = [
+  'Look de noche', 'Maquillaje natural', 'Tutorial de delineado', 
+  'Reseña de labiales', 'Skincare diario', 'Paleta de colores',
+  'Contouring perfecto', 'Tips de belleza', 'Glamour total'
+];
 
-async function generateData() {
-  console.log('Iniciando generación de datos realistas con Faker...');
-
-  // 1. Generar 50 registros en SQL (Posts)
-  console.log('Insertando 50 registros en SQL...');
-  const sqlData = Array.from({ length: 50 }).map(() => ({
-    user: faker.internet.username(),
-    caption: faker.lorem.sentence(),
-    created_at: faker.date.past().toISOString(),
+export const generateProfiles = (count: number) => {
+  return Array.from({ length: count }, () => ({
+    id: faker.string.uuid(),
+    username: faker.internet.username(),
+    avatar_url: faker.image.avatar(),
+    bio: `Amante del maquillaje y ${faker.helpers.arrayElement(['skincare', 'glitter', 'tendencias', 'belleza natural'])}.`,
   }));
-  
-  await sqlService.insert('posts', sqlData);
-  console.log('SQL poblado con 50 registros.');
+};
 
-  // 2. Generar 10,000 registros en "NoSQL" (Products)
-  console.log('Insertando 10,000 registros en NoSQL...');
-  const noSqlData = Array.from({ length: 10000 }).map(() => ({
-    name: faker.commerce.productName(),
-    price: faker.commerce.price({ min: 10, max: 200 }),
-    category: faker.commerce.department(),
-    description: faker.commerce.productDescription(),
-    timestamp: faker.date.recent().toISOString(),
+export const generatePosts = (count: number, userIds: string[]) => {
+  return Array.from({ length: count }, () => ({
+    user_id: faker.helpers.arrayElement(userIds),
+    caption: `${faker.helpers.arrayElement(MAQUILLAJE_TEMAS)} ✨ ${faker.lorem.sentence()}`,
+    image_url: faker.image.url(), // Idealmente usar una URL que traiga imágenes de maquillaje
   }));
+};
 
-  // Batch insert en grupos de 500 para evitar errores de payload de Supabase
-  for (let i = 0; i < noSqlData.length; i += 500) {
-    const batch = noSqlData.slice(i, i + 500);
-    // Para NoSQL, insertamos el objeto como un documento
-    await noSqlService.insertDocument('products', batch);
+export const generateComments = (count: number, userIds: string[], postIds: string[]) => {
+  const comentarios = ['¡Me encanta este look!', '¿Qué marca es el labial?', 'Necesito ese tono', 'Increíble técnica 😍'];
+  return Array.from({ length: count }, () => ({
+    user_id: faker.helpers.arrayElement(userIds),
+    post_id: faker.helpers.arrayElement(postIds),
+    content: faker.helpers.arrayElement(comentarios),
+  }));
+};
+
+export const generateLikes = (count: number, userIds: string[], postIds: string[]) => {
+  const likes = new Set();
+  const result = [];
+  while (result.length < count && likes.size < userIds.length * postIds.length) {
+    const user_id = faker.helpers.arrayElement(userIds);
+    const post_id = faker.helpers.arrayElement(postIds);
+    const key = `${user_id}:${post_id}`;
+    if (!likes.has(key)) {
+      likes.add(key);
+      result.push({ user_id, post_id });
+    }
   }
-  
-  console.log('NoSQL poblado con 10,000 registros.');
-  console.log('Generación finalizada.');
-}
+  return result;
+};
 
-generateData().catch(console.error);
+export const generateFollows = (count: number, userIds: string[]) => {
+  const follows = new Set();
+  const result = [];
+  while (result.length < count && follows.size < userIds.length * (userIds.length - 1)) {
+    const follower_id = faker.helpers.arrayElement(userIds);
+    const following_id = faker.helpers.arrayElement(userIds);
+    if (follower_id !== following_id) {
+      const key = `${follower_id}:${following_id}`;
+      if (!follows.has(key)) {
+        follows.add(key);
+        result.push({ follower_id, following_id });
+      }
+    }
+  }
+  return result;
+};
+
+export const generateProducts = (count: number) => {
+  const categorias = ['Labios', 'Ojos', 'Rostro', 'Skincare'];
+  return Array.from({ length: count }, () => ({
+    attributes: {
+      name: `${faker.commerce.productAdjective()} ${faker.commerce.product()}`,
+      price: faker.commerce.price({ min: 50, max: 2000 }),
+      category: faker.helpers.arrayElement(categorias),
+      description: faker.commerce.productDescription(),
+    },
+  }));
+};
