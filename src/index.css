@@ -22,7 +22,20 @@
   src: url('https://static.figma.com/font/DMSans_opsz_wght__1') format('woff2');
 }
 
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-[#fdfaf6] text-plum-900 antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-3xl border border-lavender-100 shadow-sm transition-all duration-300 hover:shadow-md;
+  }
+}
+
 
 @theme {
   --font-sans: 'DM Sans', sans-serif;

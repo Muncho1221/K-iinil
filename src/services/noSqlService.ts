@@ -6,6 +6,6 @@ export const noSqlService = {
     return await noSqlClient.from(table).select('*')
   },
   async insertDocument(table: string, data: any) {
-    return await noSqlClient.from(table).insert({ content: data })
+    return await noSqlClient.from(table).insert({ attributes: data })
   }
 }
