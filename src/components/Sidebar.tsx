@@ -1,6 +1,8 @@
 import { Icon } from './Icons'
+import { useAuth } from '../hooks/useAuth'
 
-export const Sidebar = ({ activeTab, setActiveTab, setCreateOpen, cartCount }: any) => {
+export const Sidebar = ({ activeTab, setActiveTab, setCreateOpen, cartCount, userProfile }: any) => {
+  const { signOut } = useAuth()
   const navItems = [
     { key: 'home', label: 'Inicio', Icon: Icon.Home },
     { key: 'explore', label: 'Explorar', Icon: Icon.Explore },
@@ -46,16 +48,24 @@ export const Sidebar = ({ activeTab, setActiveTab, setCreateOpen, cartCount }: a
         )}
       </button>
 
-      <div className="mt-auto pt-4 border-t border-lavender-200 flex items-center gap-3 px-2">
-        <img
-          src="https://images.unsplash.com/photo-1573977040523-e16e112ccd3e?w=80&h=80&fit=crop&auto=format"
-          alt="Mi perfil"
-          className="w-9 h-9 rounded-full object-cover border-2 border-plum-300"
-        />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-plum-900 truncate">Tu nombre</p>
-          <p className="text-xs text-plum-400 truncate">@tu_usuario</p>
+      <div className="mt-auto pt-4 border-t border-lavender-200 flex flex-col gap-3 px-2">
+        <div className="flex items-center gap-3">
+          <img
+            src={userProfile?.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
+            alt={userProfile?.username || 'Mi perfil'}
+            className="w-9 h-9 rounded-full object-cover border-2 border-plum-300"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-plum-900 truncate">{userProfile?.username || 'Tu nombre'}</p>
+            <p className="text-xs text-plum-400 truncate">@{userProfile?.username || 'usuario'}</p>
+          </div>
         </div>
+        <button
+          onClick={signOut}
+          className="flex items-center gap-2 text-sm text-plum-500 hover:text-plum-800 transition-colors px-2 py-1"
+        >
+          <Icon.LogOut /> Cerrar sesión
+        </button>
       </div>
     </aside>
   )

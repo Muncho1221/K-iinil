@@ -6,6 +6,7 @@ import { noSqlService } from './services/noSqlService'
 import { useAuth } from './hooks/useAuth'
 import { Auth } from './components/Auth'
 import { CreatePostModal } from './components/CreatePostModal'
+import { Sidebar } from './components/Sidebar'
 import { supabase } from './lib/supabaseClient'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -215,14 +216,6 @@ export default function App() {
     }
   }
 
-  const navItems: { key: 'home' | 'explore' | 'shop' | 'profile' | 'sell'; label: string; Icon: React.FC<any> }[] = [
-    { key: 'home', label: 'Inicio', Icon: Icon.Home },
-    { key: 'explore', label: 'Explorar', Icon: Icon.Explore },
-    { key: 'shop', label: 'Tienda', Icon: Icon.Shop },
-    { key: 'sell', label: 'Vender', Icon: Icon.Plus },
-    { key: 'profile', label: 'Perfil', Icon: Icon.User || (() => <span>👤</span>) },
-  ]
-
   return (
     <div className="min-h-screen bg-[#faf0ff] font-sans flex flex-col">
 
@@ -244,62 +237,13 @@ export default function App() {
 
       <div className="flex flex-1 max-w-[1400px] mx-auto w-full">
 
-        {/* ── LEFT SIDEBAR ─────────────────────────────────────── */}
-        <aside className="hidden lg:flex flex-col w-60 xl:w-64 shrink-0 sticky top-0 h-screen py-6 pl-4 pr-3 gap-1 overflow-y-auto">
-          {/* Logo */}
-          <div className="flex items-center gap-2 px-3 mb-6">
-            <span className="font-serif text-2xl font-bold text-plum-800">K'iinil</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-blush-400 mt-1" />
-          </div>
-
-          {/* Nav links */}
-          {navItems.map(({ key, label, Icon: NavIcon }) => (
-            <button
-              key={key}
-              onClick={() => { setActiveTab(key); setShowCart(false); }}
-              className={`flex items-center gap-3.5 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 ${
-                activeTab === key && !showCart
-                  ? 'bg-plum-700 text-white shadow-[0_4px_15px_rgba(107,33,168,0.3)]'
-                  : 'text-plum-700 hover:bg-lavender-100'
-              }`}
-            >
-              <NavIcon active={activeTab === key && !showCart} />
-              {label}
-            </button>
-          ))}
-
-          {/* Cart en sidebar */}
-          <button 
-            onClick={() => { setActiveTab('shop'); setShowCart(true); }}
-            className={`flex items-center gap-3.5 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 ${
-                showCart
-                  ? 'bg-plum-700 text-white shadow-[0_4px_15px_rgba(107,33,168,0.3)]'
-                  : 'text-plum-700 hover:bg-lavender-100'
-              }`}
-          >
-            <Icon.Cart /> Carrito
-            {cartCount > 0 && (
-              <span className="ml-auto w-5 h-5 rounded-full bg-blush-500 text-white text-xs font-bold flex items-center justify-center">{cartCount}</span>
-            )}
-          </button>
-
-          {/* Create post */}
-          <button
-            onClick={() => setCreateOpen(true)}
-            className="mt-3 flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-plum-700 text-white text-sm font-semibold hover:bg-plum-800 transition-colors shadow-[0_4px_15px_rgba(107,33,168,0.25)]"
-          >
-            <Icon.Plus /> Publicar
-          </button>
-
-          {/* Profile */}
-          <div className="mt-auto pt-4 border-t border-lavender-200 flex items-center gap-3 px-2">
-            <img src={profile?.avatar_url} alt={profile?.username} className="w-9 h-9 rounded-full bg-plum-300" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-plum-900 truncate">{profile?.username || 'Cargando...'}</p>
-              <p className="text-xs text-plum-400 truncate">@{profile?.username || 'usuario'}</p>
-            </div>
-          </div>
-        </aside>
+        <Sidebar 
+          activeTab={activeTab} 
+          setActiveTab={(tab: any) => { setActiveTab(tab); setShowCart(tab === 'shop'); }} 
+          setCreateOpen={setCreateOpen} 
+          cartCount={cartCount} 
+          userProfile={profile}
+        />
 
         {/* ── MAIN FEED ─────────────────────────────────────────── */}
         <main className="flex-1 min-w-0 px-0 lg:px-4 xl:px-6 py-0 lg:py-6">
